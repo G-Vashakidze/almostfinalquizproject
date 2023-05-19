@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'quiz/style.css' %}">
+    <title>Document</title>
+</head>
+<body>
+    <header style="display: {% if not done %}block{% else %}none{% endif %}">
+    <div class="base-container" >
+        <div id="timer"></div>
+        <form method="POST"action='{% url "quiz:quiz" q_type=q_type question_ids=question_ids %}' >
+            {% csrf_token %}
+            <button class="qq" name='qq' action='{% url "quiz:quiz" q_type=q_type question_ids=question_ids %}'>Quit</button>
+        </form> 
+        </div>
+    </header>
+    <form method="POST" 
+    action='{% url "quiz:quiz" q_type=q_type question_ids=question_ids %}' 
+    style="display: {% if not done %}none{% else %}block{% endif %}">
+    {% csrf_token %}
+    <div class="test-done" >
+        <p>{{x}}</p>
+        <div class="done_buttons">
+            <button class="done_button"  name='newquiz'>New Quiz</button>
+            <button class="done_button" name='logout'>Log Out</button>
+        </div>
+    </div>
+    </form> 
+    <div class="container", style="display: {% if not done %}block{% else %}none{% endif %}"> 
+        {% for q in list %}
+        <div class="questions" style="display: none;">  
+            <div class="question_text">
+                {{q.1.question_text}}
+                <input class='q_id' type="hidden" name="qs" value="{{q.1.id}}">
+            </div>
+            <div class="choices">
+            {% for choice in q.2 %}
+            <div class="choice">
+                <input type="radio" name="choice" value="{{choice.is_correct}}" class="choice_input{{q.0}}">
+                <label for="choice">{{choice.choice_text}}</label>
+            </div>
+            {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+        
+        <div class="buttons">
+            <button class='button' id="submit">submit</button>
+            <button class='button' id="next" disabled='disabled'>next</button>  
+        </div>
+    </div>
+    <form method="POST" 
+    action='{% url "quiz:quiz" q_type=q_type question_ids=question_ids %}' >
+            {% csrf_token %}
+            <input type="hidden" id='score' name="score" value="">
+            <input type="hidden" id='answered' name="answered" value="">
+            <input type="submit" name="SBT" id='sbt' style="display: none;">
+            <input type="submit" name="timersubmit" id='timersubmit' style="display: none;">
+            
+    </form>
+    <input type="hidden" id='time' name="time" value="{{time}}">
+    
+        
+             
+
+    <script>   
+            const form_submit = document.getElementById('sbt')
+            const timer = document.getElementById('timer');
+            const time = document.getElementById('time')
+            let timeValue = time.value
+            const t_b = document.getElementById('timersubmit')
+            const Score = document.getElementById('score')
+            const Answered = document.getElementById('answered')
+            const submit = document.getElementById('submit')
+            const next = document.getElementById('next');
+            const f = document.querySelectorAll('.questions');
+            let ids_list = []
+            let i = 0 
+            let score = 0
+            f[i].style.display = 'block'
+            next.addEventListener('click', (event) => {
+          
+                event.preventDefault();
+                if (i < 6){
+           
+                f[i].style.display = 'none' ;
+                i++;
+                f[i].style.display = 'block'
+                next.setAttribute('disabled','disabled')
+                submit.removeAttribute('disabled')
+                }
+                else{
+               
+                    Score.setAttribute('value',score)
+                    Answered.setAttribute('value',ids_list)
+                    form_submit.click()
+
+                }
+            });
+    
+            submit.addEventListener('click', (event)=>{
+                event.preventDefault();
+                const selectedChoice = document.querySelector('input[name="choice"]:checked');
+                const choices = document.querySelectorAll(`.choice_input${i}`);
+                const q_id = document.querySelectorAll('.q_id');
+                let v = q_id[i]
+                let ids = v.value
+                submit.setAttribute('disabled','disabled')
+                next.removeAttribute('disabled')
+                choices.forEach(choice => {
+                    choice.disabled = true;
+                  });
+
+                
+                if (selectedChoice.value == 'True'){
+                    selectedChoice.parentElement.style.border = '1px solid green'  
+                    score++ 
+                    ids_list.push(ids)
+                }
+                else{
+                    selectedChoice.parentElement.style.border = '1px solid red'
+                    }
+            }) 
+
+            
+             if (timeValue > 0){
+                updateTimer();
+                const timerInterval = setInterval(updateTimer, 1000);
+            }
+            function updateTimer() {
+            const remainingTime = timeValue
+            const newRemainingTime = remainingTime - 1;
+            timeValue = newRemainingTime
+            time.value = timeValue
+    
+            const minutes = Math.floor(newRemainingTime / 60);
+            let seconds = newRemainingTime % 60;
+            if (seconds < 10) {
+            seconds = '0' + seconds;
+            }
+            timer.textContent = `${minutes}:${seconds}`;
+            if (minutes < 1) {
+            timer.style.color = 'red';
+            } 
+            if (timeValue === 0) {
+                const k = document.getElementById('timersubmit')
+                t_b.click();
+                clearInterval(timerInterval);
+            }
+            }  
+
+        
+      
+    </script>
+</body>
+</html>

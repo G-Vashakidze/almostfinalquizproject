@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'main/style.css' %}">
+    <title>Document</title>
+</head>
+<body>
+    <div class="headercontainer">
+        <header class="header inactive">
+            <div class="menucontainer active">
+            <nav class="menu">
+            <a class='ripple' href="{% url 'main:MA' %}"><div class="achivements mainbtn">Achivements</div></a>
+            <a class='ripple' href="{% url 'main:QZ' %}"><div class="quizes mainbtn" >Offered Quizes</div></a>
+            <a class='ripple' href="{% url 'main:AQ' %}"><div class="addquestion mainbtn">Add Question</div></a>
+            <a class='ripple' href="{% url 'main:LD' %}"><div class="leaderboards mainbtn">leaderboards</div></a>
+            <a class='ripple' href="{% url 'main:LG' %}"><div class="logout mainbtn">Logout</div></a>
+            </nav>
+            </div>
+            <div class="burger">
+                <span></span>
+            </div>
+        </header>
+        </div>
+    <div class='content'>
+    {% block content %}
+    {% endblock %}
+    </div>
+    
+  
+
+
+
+<script src="{% static 'main/js/script.js' %}"></script>
+ 
+</body>
+</html>

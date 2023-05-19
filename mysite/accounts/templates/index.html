@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=form, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'accounts/style.css' %}">
+   
+    <title>Document</title>
+</head>
+<body>
+    <div style="display: {% if err %}none{% else %}block{% endif %}">{{ err }}</div>
+    <div class="container" style="display: {% if err %}none{% else %}block{% endif %}">
+    <form method='POST' >
+        {% csrf_token %}
+        <div class="form-control">
+            <input type="text" name = 'username' required>
+            <label class='label'>UserName</label>
+        </div>
+        <div class="form-control">
+            <input type="password" name='password' required>
+            <label class='label'>Password</label>    
+        </div>
+        <div class="btn-container">
+            <input class="btn" type="submit" name="login" value="login" id='login'>
+            <input class="btn" type="submit" name="createuser" value="createuser" id='signup'>
+        </div>
+    </form>
+</div>
+<div class="container" style="display: {% if err %}block{% else %}none{% endif %}">
+    <form method="POST">
+        {% csrf_token %}
+        {% for field in form %}
+        <div class="form-control">
+            {% if not field.field.required %}
+            
+            <input type="{{ field.field.widget.input_type }}" name="{{ field.html_name }}" id="{{ field.auto_id }}" required>
+            {%else%}
+            {{ field}}
+            {% endif %}
+        
+        {{ field.label_tag }}
+        </div>
+        {% endfor %}
+            <div class="form-control">
+                <input type="password" name="password" id="password" required>
+                <label>Password</label>
+            </div>
+            <div class="form-control">
+                <input type="password" name="confirm_password" id="confirm_password" required>
+                <label>Confirm Password</label>
+            </div>
+            <input class="btn" type="submit" name="signup" value="signup" id="signup3" style="display:none">
+    </form>
+    <input class="btn" type="submit" name="signup1" value="signup" id="signup1">
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const labels = document.querySelectorAll('.form-control label')
+
+        labels.forEach(label => {
+            label.innerHTML = label.innerText
+            .split('')
+            .map((letter,idx)=>`<span style="transition-delay:${idx*50}ms">${letter}</span>`)
+            .join('')
+        })
+      });
+      const passwordInput = document.getElementById('password');
+      const confirmPasswordInput = document.getElementById('confirm_password');
+      const signupButton = document.getElementById('signup1');
+      const spButton = document.getElementById('signup3');
+      const parentElement = passwordInput.parentNode;
+  
+      signupButton.addEventListener('click', function (event) {
+          if (passwordInput.value !== confirmPasswordInput.value) {
+              event.preventDefault();
+              const pElement = document.createElement('p');
+              pElement.innerText = 'Password does not match';
+              pElement.style.color = 'red'
+              parentElement.appendChild(pElement);
+              
+          }else{
+            spButton.click()
+            parentElement.removeChild(pElement);
+          }
+      });
+  
+   
+</script>
+</body>
+</html>

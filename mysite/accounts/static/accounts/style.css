@@ -1,0 +1,101 @@
+*{box-sizing: border-box;}
+
+body{
+    background-image: url('/imageforacc/download.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    height: 100vh;
+    overflow: hidden;
+    background-color: steelblue;
+    color: white;
+
+}
+.container{
+    background-color: rgba(0,0,0,0.4);
+    padding: 15px 40px;
+    border-radius: 5px;
+}
+
+.form-control{
+    position: relative;
+    margin: 10px 0 30px;
+    width: 300px;
+
+}
+@media(max-width:377px){
+    .form-control{
+        width: 250px;
+    }
+}
+
+.form-control input {
+    position: relative;
+    z-index: 1;
+    background-color: transparent;
+    border: 0;
+    border-bottom: 2px white solid;
+    display: block;
+    width: 100%;
+    padding-top: 15px;
+    font-size: 18px;
+    color: white;
+}
+
+.form-control input:focus , .form-control input:valid{
+    outline: 0;
+    border-bottom-color: lightblue ;
+}
+.btn-container{
+    display: flex;
+    justify-content: space-between;
+}
+
+.btn{
+    width: 49%;
+    border: none;
+    border-radius: 5px;
+    height: 40px;
+    font-size: 18px;
+}
+#signup{
+    background-color: rgba(0,0,0,0.4);
+    color: white;
+}
+#login{
+    background-color: rgba(245, 240, 240, 0.863);
+}
+
+.btn:active{
+    transform: scale(0.98);
+}
+
+.form-control label{
+    position: absolute;
+    z-index: 0;
+    top: 15px;
+    left: 15px;   
+}
+
+.form-control label span{
+    display: inline-block;
+    font-size: 18px;
+    min-width: 5px;
+    transition: 0.3s ease-in;
+}
+
+.form-control input:focus + label span,
+.form-control input:valid + label span{
+color: lightblue;
+transform: translateY(-30px);
+}
+
+#signup1{
+    background-color: rgba(0,0,0,0.4);
+    color: white;
+}

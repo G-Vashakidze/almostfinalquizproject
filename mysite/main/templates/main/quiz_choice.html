@@ -1,0 +1,21 @@
+{%extends 'main/main.html'%}
+{%block content%}
+     <form method="POST" action="{% url 'main:QZ' %}" class='quizchoice'>
+        <div class='quizbtncont'>
+        {% csrf_token %}
+        {%for q in q_types%}
+        <button class="quizbutton" id="button" name="button" value="{{q}}" class='quizbutton'>{{q|upper}}</button>
+        {%endfor%}
+        </div>
+
+    </form> 
+        
+    
+    <div id="myModal" class="modal" style="display: block">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>You have completed the quiz</h2>
+            <p>Congratulations! You have answered all the questions.</p>
+        </div>
+        </div>
+{%endblock%}  
